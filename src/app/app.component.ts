@@ -8,7 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSliderModule } from '@angular/material/slider';
 
 interface ChordParts {
   readonly note: string;
@@ -31,7 +30,6 @@ interface ChordListResult {
     MatIconModule,
     MatInputModule,
     MatSlideToggleModule,
-    MatSliderModule,
     ReactiveFormsModule,
   ],
   templateUrl: './app.component.html',
