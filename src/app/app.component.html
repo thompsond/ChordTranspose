@@ -1,23 +1,23 @@
 <div class="wrapper">
   <h1>Chord Transpose</h1>
   <div class="main-content">
-    <textarea name="" id="" placeholder="Initial text" matInput [formControl]="inputChordsFormControl"></textarea>
+    <textarea name="" id="input-textarea" placeholder="Initial text" matInput [formControl]="inputChordsFormControl"></textarea>
     <div class="controls-container">
       <div class="transpose-container">
         <span>Amount to transpose:</span>
         <div class="transpose-value" *ngIf="transposeValue$ | async as transposeValue">{{transposeValue}}</div>
         <div class="transpose-btns-container">
-          <button mat-icon-button (click)="onChangeTransposeValue(DECREASE_IDENTIFIER)" color="warn">
+          <button mat-icon-button class="decrease" (click)="onChangeTransposeValue(DECREASE_IDENTIFIER)" color="warn">
             <mat-icon>remove</mat-icon>
           </button>
-          <button mat-icon-button (click)="onChangeTransposeValue(INCREASE_IDENTIFIER)" color="primary">
+          <button mat-icon-button class="increase" (click)="onChangeTransposeValue(INCREASE_IDENTIFIER)" color="primary">
             <mat-icon>add</mat-icon>
           </button>
         </div>
       </div>
-      <mat-slide-toggle [formControl]="useFlatsFormControl">Use flats</mat-slide-toggle>
+      <mat-slide-toggle id="use-flats-btn" [formControl]="useFlatsFormControl">Use flats</mat-slide-toggle>
       <button mat-flat-button color="primary" class="transpose-btn" (click)="onTranspose()">Transpose</button>
     </div>
-    <textarea name="" id="" matInput [formControl]="outputChordsFormControl"></textarea>
+    <textarea name="" id="output-textarea" matInput [formControl]="outputChordsFormControl"></textarea>
   </div>
 </div>
