@@ -1,0 +1,39 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 1em;
+
+    h1 {
+        text-align: center;
+    }
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1em;
+    height: 100%;
+}
+
+textarea {
+    font-size: 1.2em;
+    padding: .8em;
+}
+
+.controls-container {
+    display: grid;
+    gap: 1em;
+    justify-items: center;
+    align-self: center;
+}
+
+.transpose-container {
+    display: grid;
+    place-items: center;
+}
+
+.transpose-value {
+    margin: 8px 0 6px;
+    font-size: 1.5em;
+}
