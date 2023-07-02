@@ -58,6 +58,7 @@ export class AppComponent {
     const useFlats = this.useFlatsFormControl.value ?? false;
 
     for (const line of lines) {
+      // Section name lines or empty lines
       if (line.includes('[') || line.trim() === '') {
         newLines.push(line);
         continue;
@@ -110,9 +111,10 @@ export class AppComponent {
   getListResult(chord: string, useFlats: boolean): ChordListResult|null {
     for (const list of [this.flatsList, this.sharpsList]) {
       if (list.includes(chord)) {
-        const indexAt = list.indexOf(chord);
-        if (useFlats) return {chordList: this.flatsList, index: indexAt};
-        else return {chordList: this.sharpsList, index: indexAt};
+        return {
+          chordList: useFlats ? this.flatsList : this.sharpsList,
+          index: list.indexOf(chord),
+        };
       }
     }
     return null;
