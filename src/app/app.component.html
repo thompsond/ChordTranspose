@@ -1,7 +1,7 @@
 <div class="wrapper">
   <h1>Chord Transpose</h1>
   <div class="main-content">
-    <textarea name="" id="input-textarea" placeholder="Initial text" matInput [formControl]="inputChordsFormControl"></textarea>
+    <textarea name="" id="input-textarea" placeholder="Initial text" matInput [formControl]="inputChordsFormControl" (input)="transpose()"></textarea>
     <div class="controls-container">
       <div class="transpose-container">
         <span>Amount to transpose:</span>
@@ -16,7 +16,6 @@
         </div>
       </div>
       <mat-slide-toggle id="use-flats-btn" [formControl]="useFlatsFormControl">Use flats</mat-slide-toggle>
-      <button mat-flat-button color="primary" class="transpose-btn" (click)="onTranspose()">Transpose</button>
     </div>
     <textarea name="" id="output-textarea" matInput [formControl]="outputChordsFormControl"></textarea>
   </div>
