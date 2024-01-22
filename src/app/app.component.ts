@@ -2,6 +2,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -47,7 +48,13 @@ export class AppComponent {
   // Whether the next valid line of text is expected to be chord names
   isChordLine = true;
 
-  onTranspose() {
+  constructor() {
+    this.useFlatsFormControl.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.transpose();
+    });
+  }
+
+  transpose() {
     this.isChordLine = true;
     const lines = this.inputChordsFormControl.value?.split('\n') ?? [];
     const newLines: string[] = [];
@@ -156,5 +163,6 @@ export class AppComponent {
     if (operation === this.DECREASE_IDENTIFIER && currentValue > -11) {
       this.transposeValue$.next(currentValue === 1 ? (currentValue - 2) : (currentValue - 1));
     }
+    this.transpose();
   }
 }
