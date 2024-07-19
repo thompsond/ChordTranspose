@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
+/** Representation of a chord, ex. Fm6 -> F, m6 */
 interface ChordParts {
   readonly note: string;
   readonly modifiers: string;
@@ -34,7 +35,8 @@ interface ChordListResult {
     ReactiveFormsModule,
   ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
   private readonly sharpsList = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
@@ -77,6 +79,7 @@ export class AppComponent {
         continue;
       }
       for (const chord of line.split(' ')) {
+        // Slash chords
         if (chord.includes('/')) {
           const result = chord.split('/');
           const [left, right] = result;
@@ -117,12 +120,11 @@ export class AppComponent {
   /** Returns the correct note list */
   getListResult(chord: string, useFlats: boolean): ChordListResult|null {
     for (const list of [this.flatsList, this.sharpsList]) {
-      if (list.includes(chord)) {
-        return {
-          chordList: useFlats ? this.flatsList : this.sharpsList,
-          index: list.indexOf(chord),
-        };
-      }
+      if (!list.includes(chord)) continue;
+      return {
+        chordList: useFlats ? this.flatsList : this.sharpsList,
+        index: list.indexOf(chord),
+      };
     }
     return null;
   }
@@ -135,8 +137,10 @@ export class AppComponent {
       return ' ';
     }
     let newChordPos = (initialChordPos + transposeValue);
-    if ((initialChordPos + transposeValue) > (listToCheck.length - 1)) {
+    if (newChordPos > (listToCheck.length - 1)) {
       newChordPos -= listToCheck.length;
+    } else if (newChordPos < 0) {
+      newChordPos += listToCheck.length;
     }
     return listToCheck[newChordPos];
   }
@@ -145,11 +149,10 @@ export class AppComponent {
   parseChord(value: string): ChordParts {
     const regexList = [/[A-Z]\#/, /[A-Z]b/];
     for (const regex of regexList) {
-      if (regex.test(value)) {
-        return regex.exec(value)!.map((note): ChordParts => {
-          return {note, modifiers: value.substring(note.length)};
-        })[0];
-      }
+      if (!regex.test(value)) continue;
+      return regex.exec(value)!.map((note): ChordParts => {
+        return {note, modifiers: value.substring(note.length)};
+      })[0];
     }
     return {note: value[0], modifiers: value.substring(1)};
   }
