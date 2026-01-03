@@ -1,8 +1,9 @@
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { AppComponent } from './app.component';
 import { AppHarness } from './harness';
-import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
-import { HarnessLoader } from '@angular/cdk/testing';
 
 describe('AppComponent', () => {
   let state: {
@@ -33,24 +34,24 @@ describe('AppComponent', () => {
   });
 
   it('should correctly transpose 1 step', async () => {
-    const inputTextArea = await state.loader.getHarness(state.harness.inputTextArea);
+    const inputTextArea = await state.harness.inputTextArea();
     await inputTextArea.setValue('[Verse 1]\nA B C C#\nPizza');
-    const transposeButton = await state.loader.getHarness(state.harness.transposeButton);
-    await transposeButton.click();
-    const outputTextArea = await state.loader.getHarness(state.harness.outputTextArea);
+    const increaseTransposeButton = await state.harness.increaseTransposeButton();
+    await increaseTransposeButton.click();
+    const outputTextArea = await state.harness.outputTextArea();
     expect(await outputTextArea.getValue()).toBe('[Verse 1]\nA# C C# D\nPizza');
   });
 
   it('should correctly change from sharps to flats', async () => {
-    const useFlatsButton = await state.loader.getHarness(state.harness.useFlatsButton);
+    const useFlatsButton = await state.harness.useFlatsButton();
     expect(await useFlatsButton.isChecked()).toEqual(false);
     await useFlatsButton.check();
     expect(await useFlatsButton.isChecked()).toEqual(true);
-    const inputTextArea = await state.loader.getHarness(state.harness.inputTextArea);
+    const inputTextArea = await state.harness.inputTextArea();
     await inputTextArea.setValue('[Verse 1]\nA B C C#\nPizza');
-    const transposeButton = await state.loader.getHarness(state.harness.transposeButton);
+    const transposeButton = await state.harness.transposeButton();
     await transposeButton.click();
-    const outputTextArea = await state.loader.getHarness(state.harness.outputTextArea);
+    const outputTextArea = await state.harness.outputTextArea();
     expect(await outputTextArea.getValue()).toBe('[Verse 1]\nBb C Db D\nPizza');
   });
 

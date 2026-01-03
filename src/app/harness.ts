@@ -1,16 +1,15 @@
-import {ComponentHarness} from '@angular/cdk/testing';
-import {MatInputHarness} from '@angular/material/input/testing';
-import {MatButtonHarness} from '@angular/material/button/testing';
-import {MatSlideToggleHarness} from '@angular/material/slide-toggle/testing';
+import { ComponentHarness } from '@angular/cdk/testing';
+import { MatButtonHarness } from '@angular/material/button/testing';
+import { MatInputHarness } from '@angular/material/input/testing';
+import { MatSlideToggleHarness } from '@angular/material/slide-toggle/testing';
 
 export class AppHarness extends ComponentHarness {
     static hostSelector = 'app-root';
 
-    inputTextArea = MatInputHarness.with({selector: '#input-textarea'});
-    outputTextArea = MatInputHarness.with({selector: '#output-textarea'});
-    transposeButton = MatButtonHarness.with({selector: '.transpose-btn'});
-    useFlatsButton = MatSlideToggleHarness.with({selector: '#use-flats-btn'});
-    transposeValue = this.locatorFor('.transpose-value');
-    decreaseTransposeButton = this.locatorFor('.decrease');
-    increaseTransposeButton = this.locatorFor('.increase');
+    readonly inputTextArea = this.locatorFor(MatInputHarness.with({selector: '#input-textarea'}));
+    readonly outputTextArea = this.locatorFor(MatInputHarness.with({selector: '#output-textarea'}));
+    readonly useFlatsButton = this.locatorFor(MatSlideToggleHarness.with({selector: '#use-flats-btn'}));
+    readonly transposeValue = this.locatorFor('.transpose-value');
+    readonly decreaseTransposeButton = this.locatorFor(MatButtonHarness.with({selector: '.decrease'}));
+    readonly increaseTransposeButton = this.locatorFor(MatButtonHarness.with({selector: '.increase'}));
 }

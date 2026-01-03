@@ -47,8 +47,6 @@ export class AppComponent {
   outputChordsFormControl = new FormControl('');
   useFlatsFormControl = new FormControl(false);
   transposeValue$ = new BehaviorSubject(1);
-  // Whether the next valid line of text is expected to be chord names
-  isChordLine = true;
 
   constructor() {
     this.useFlatsFormControl.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
@@ -57,7 +55,6 @@ export class AppComponent {
   }
 
   transpose() {
-    this.isChordLine = true;
     const lines = this.inputChordsFormControl.value?.split('\n') ?? [];
     const newLines: string[] = [];
     let prevChar = ' ';
@@ -67,15 +64,13 @@ export class AppComponent {
     const useFlats = this.useFlatsFormControl.value ?? false;
 
     for (const line of lines) {
-      // Section name lines or empty lines
-      if (line.includes('[') || line.trim() === '') {
+      if (isSectionNameOrEmptyLine(line)) {
         newLines.push(line);
         continue;
       }
-      // Lyric lines
-      if (!this.isChordLine) {
+
+      if (!isChordLine(line)) {
         newLines.push(line);
-        this.isChordLine = true;
         continue;
       }
       for (const chord of line.split(' ')) {
@@ -111,7 +106,6 @@ export class AppComponent {
       }
       newLines.push(newLine);
       newLine = '';
-      this.isChordLine = false;
     }
     this.outputChordsFormControl.reset();
     this.outputChordsFormControl.setValue(newLines.join('\n'));
@@ -168,4 +162,12 @@ export class AppComponent {
     }
     this.transpose();
   }
+}
+
+function isSectionNameOrEmptyLine(line: string): boolean {
+  return line.includes('[') || line.trim() === '';
+}
+
+export function isChordLine(line: string) {
+  return /^\s*([A-G][b#]?(?:maj|Maj|min|m|M|dim|aug|sus[24]|add[249]|\d{1,2}|[+mtb\(\)])*(?:\/[A-G][b#]?)?)(?:\s+([A-G][b#]?(?:maj|Maj|min|m|M|dim|aug|sus[24]|add[249]|\d{1,2}|[+mtb\(\)])*(?:\/[A-G][b#]?)?))*\s*$/g.test(line);
 }
